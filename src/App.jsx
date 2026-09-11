@@ -139,22 +139,13 @@ export default function App() {
             />
           ) : (
             <div className="h-full flex items-center justify-center">
-              <div className="text-center space-y-4 fade-in">
-                <div className="w-20 h-20 mx-auto bg-roblox-card rounded-2xl flex items-center justify-center border border-roblox-border overflow-hidden">
-                  <img src="icon.png" alt="Logo" className="w-full h-full object-cover" />
-                </div>
-                <div>
-                  <h2 className="text-xl font-semibold text-gray-300">
-                    {games.length === 0
-                      ? "No games tracked yet"
-                      : "Select a game"}
-                  </h2>
-                  <p className="text-gray-500 mt-1">
-                    {games.length === 0
-                      ? "Click the + button to add your first game"
-                      : "Choose a game from the sidebar to view details"}
-                  </p>
-                </div>
+              <div className="text-center fade-in">
+                <img src="icon.png" alt="Logo" className="w-16 h-16 mx-auto mb-4 opacity-50" />
+                <p className="text-gray-400 text-sm">
+                  {games.length === 0
+                    ? "Click + Add Game to get started"
+                    : "Select a game from the sidebar"}
+                </p>
               </div>
             </div>
           )}

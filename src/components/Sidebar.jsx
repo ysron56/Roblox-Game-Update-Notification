@@ -8,15 +8,15 @@ function formatNumber(num) {
 }
 
 function timeAgo(dateStr) {
-  if (!dateStr) return "Unknown";
+  if (!dateStr) return "";
   const diff = Date.now() - new Date(dateStr).getTime();
   const mins = Math.floor(diff / 60000);
-  if (mins < 1) return "Just now";
-  if (mins < 60) return `${mins}m ago`;
+  if (mins < 1) return "now";
+  if (mins < 60) return `${mins}m`;
   const hrs = Math.floor(mins / 60);
-  if (hrs < 24) return `${hrs}h ago`;
+  if (hrs < 24) return `${hrs}h`;
   const days = Math.floor(hrs / 24);
-  return `${days}d ago`;
+  return `${days}d`;
 }
 
 export default function Sidebar({
@@ -29,84 +29,77 @@ export default function Sidebar({
   loading,
 }) {
   return (
-    <div className="w-72 bg-roblox-card/50 border-r border-roblox-border flex flex-col">
-      {/* Header */}
-      <div className="p-4 border-b border-roblox-border/50">
+    <div className="w-60 bg-roblox-card border-r border-roblox-border flex flex-col">
+      <div className="p-3 border-b border-roblox-border">
         <div className="flex items-center justify-between mb-3">
-          <h1 className="text-sm font-bold text-gray-300 uppercase tracking-wider">
+          <span className="text-xs font-semibold text-gray-400 uppercase tracking-wide">
             Watchlist
-          </h1>
-          <span className="text-xs text-gray-500 bg-roblox-dark px-2 py-0.5 rounded-full">
-            {games.length} games
+          </span>
+          <span className="text-xs text-gray-500">
+            {games.length}
           </span>
         </div>
         <div className="flex gap-2">
           <button
             onClick={onAddGame}
-            className="flex-1 btn-primary flex items-center justify-center gap-2 text-sm py-2"
+            className="flex-1 bg-roblox-accent hover:bg-roblox-accent/90 text-white text-sm font-medium py-1.5 rounded-md transition-colors"
           >
-            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M12 5v14M5 12h14" />
-            </svg>
-            Add Game
+            + Add Game
           </button>
           <button onClick={onOpenSettings} className="btn-icon" title="Settings">
-            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-              <path d="M12.22 2h-.44a2 2 0 00-2 2v.18a2 2 0 01-1 1.73l-.43.25a2 2 0 01-2 0l-.15-.08a2 2 0 00-2.73.73l-.22.38a2 2 0 00.73 2.73l.15.1a2 2 0 011 1.72v.51a2 2 0 01-1 1.74l-.15.09a2 2 0 00-.73 2.73l.22.38a2 2 0 002.73.73l.15-.08a2 2 0 012 0l.43.25a2 2 0 011 1.73V20a2 2 0 002 2h.44a2 2 0 002-2v-.18a2 2 0 011-1.73l.43-.25a2 2 0 012 0l.15.08a2 2 0 002.73-.73l.22-.39a2 2 0 00-.73-2.73l-.15-.08a2 2 0 01-1-1.74v-.5a2 2 0 011-1.74l.15-.09a2 2 0 00.73-2.73l-.22-.38a2 2 0 00-2.73-.73l-.15.08a2 2 0 01-2 0l-.43-.25a2 2 0 01-1-1.73V4a2 2 0 00-2-2z" />
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <circle cx="12" cy="12" r="3" />
+              <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z" />
             </svg>
           </button>
         </div>
       </div>
 
-      {/* Game List */}
-      <div className="flex-1 overflow-y-auto p-2 space-y-1.5">
+      <div className="flex-1 overflow-y-auto">
         {loading ? (
           <div className="flex items-center justify-center py-12">
-            <div className="w-6 h-6 border-2 border-roblox-accent border-t-transparent rounded-full animate-spin" />
+            <div className="w-5 h-5 border-2 border-gray-500 border-t-transparent rounded-full animate-spin" />
           </div>
         ) : games.length === 0 ? (
-          <div className="text-center py-12 text-gray-500 text-sm">
-            <p>No games tracked</p>
-            <p className="text-xs mt-1">Add a game to start monitoring</p>
+          <div className="px-4 py-12 text-center">
+            <p className="text-sm text-gray-500">No games tracked</p>
+            <p className="text-xs text-gray-600 mt-1">Click + Add Game to start</p>
           </div>
         ) : (
           games.map((game) => (
             <div
               key={game.id}
               onClick={() => onSelectGame(game)}
-              className={`game-card slide-in ${
-                selectedGame?.id === game.id ? "selected" : ""
+              className={`flex items-center gap-3 px-3 py-2 cursor-pointer transition-colors duration-100 ${
+                selectedGame?.id === game.id
+                  ? "bg-roblox-hover"
+                  : "hover:bg-roblox-hover/50"
               }`}
             >
-              <div className="flex gap-3">
-                <div className="relative flex-shrink-0">
-                  <img
-                    src={
-                      game.thumbnail ||
-                      `https://thumbnails.roblox.com/v1/games/icons?universeIds=${game.id}&returnPolicy=PlaceHolder&size=100x100&format=Png&isCircular=false`
-                    }
-                    alt={game.name}
-                    className="w-12 h-12 rounded-lg object-cover bg-roblox-dark"
-                    onError={(e) => {
-                      e.target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23666'%3E%3Cpath d='M5.164 0L0 18.534l12.626 5.347L24 5.347 18.836 0H5.164z'/%3E%3C/svg%3E";
-                    }}
-                  />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <h3 className="text-sm font-medium text-gray-200 truncate">
-                    {game.name}
-                  </h3>
-                  <p className="text-xs text-gray-500 truncate">{game.creator}</p>
-                  <div className="flex items-center gap-2 mt-1">
-                    <span className="status-badge bg-roblox-green/20 text-roblox-green">
-                      <span className="inline-block w-1.5 h-1.5 bg-roblox-green rounded-full mr-1" />
-                      {formatNumber(game.playing)} playing
-                    </span>
-                    <span className="text-xs text-gray-500">
-                      {timeAgo(game.lastUpdated)}
-                    </span>
-                  </div>
+              <img
+                src={
+                  game.thumbnail ||
+                  `https://thumbnails.roblox.com/v1/games/icons?universeIds=${game.id}&returnPolicy=PlaceHolder&size=100x100&format=Png&isCircular=false`
+                }
+                alt={game.name}
+                className="w-10 h-10 rounded-md object-cover bg-roblox-dark flex-shrink-0"
+                onError={(e) => {
+                  e.target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23444'%3E%3Cpath d='M5.164 0L0 18.534l12.626 5.347L24 5.347 18.836 0H5.164z'/%3E%3C/svg%3E";
+                }}
+              />
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-gray-200 truncate">
+                  {game.name}
+                </p>
+                <div className="flex items-center gap-1.5 mt-0.5">
+                  <span className="inline-block w-1.5 h-1.5 bg-roblox-green rounded-full" />
+                  <span className="text-xs text-gray-400">
+                    {formatNumber(game.playing)} playing
+                  </span>
+                  <span className="text-xs text-gray-600">·</span>
+                  <span className="text-xs text-gray-500">
+                    {timeAgo(game.lastUpdated)}
+                  </span>
                 </div>
               </div>
             </div>
