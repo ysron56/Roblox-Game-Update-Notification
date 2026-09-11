@@ -57,7 +57,7 @@ function createWindow() {
 }
 
 function createTray() {
-  const icon = nativeImage.createEmpty();
+  const icon = nativeImage.createFromPath(path.join(__dirname, "src", "icon.png"));
   tray = new Tray(icon);
   tray.setToolTip("Roblox Game Notifier");
   updateTrayMenu();
