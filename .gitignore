@@ -1,6 +1,9 @@
 node_modules/
 dist/
-release/
+release/*.exe
+release/*.dll
+release/*.asar
+release/win-unpacked/
 .env
 *.log
 .DS_Store
