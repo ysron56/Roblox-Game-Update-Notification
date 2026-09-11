@@ -7,7 +7,7 @@
 ![Tailwind](https://img.shields.io/badge/Tailwind-3.4-06B6D4?style=flat-square&logo=tailwindcss)
 ![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
 
-![Preview](https://via.placeholder.com/800x400/0f0f13/ffffff?text=Roblox+Game+Notifier)
+![Preview](preview.png)
 
 ---
 
