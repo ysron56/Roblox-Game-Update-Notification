@@ -1,0 +1,185 @@
+import React, { useState, useEffect } from "react";
+import Sidebar from "./components/Sidebar";
+import GameDetail from "./components/GameDetail";
+import AddGameModal from "./components/AddGameModal";
+import Settings from "./components/Settings";
+import Toast from "./components/Toast";
+import NotificationPanel from "./components/NotificationPanel";
+
+export default function App() {
+  const [games, setGames] = useState([]);
+  const [selectedGame, setSelectedGame] = useState(null);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const [showNotifPanel, setShowNotifPanel] = useState(false);
+  const [notifCount, setNotifCount] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    window.electronAPI.getGames().then((g) => {
+      setGames(g);
+      setLoading(false);
+    });
+
+    window.electronAPI.onGamesList((updatedGames) => {
+      setGames(updatedGames);
+    });
+
+    window.electronAPI.onGameUpdated((updatedGame) => {
+      setGames((prev) =>
+        prev.map((g) => (g.id === updatedGame.id ? { ...g, ...updatedGame } : g))
+      );
+      if (selectedGame?.id === updatedGame.id) {
+        setSelectedGame((prev) => ({ ...prev, ...updatedGame }));
+      }
+    });
+
+    window.electronAPI.onSelectGame((gameId) => {
+      const game = games.find((g) => g.id === gameId);
+      if (game) setSelectedGame(game);
+    });
+
+    window.electronAPI.getNotifHistory().then((h) => {
+      setNotifCount(h.length);
+    });
+
+    window.electronAPI.onNotifHistoryUpdate((h) => {
+      setNotifCount(h.length);
+    });
+  }, []);
+
+  const handleAddGame = async (placeId) => {
+    const result = await window.electronAPI.addGame(placeId);
+    if (result.error) return result;
+    setGames((prev) => [...prev, result.game]);
+    setShowAddModal(false);
+    return result;
+  };
+
+  const handleRemoveGame = async (universeId) => {
+    const updated = await window.electronAPI.removeGame(universeId);
+    setGames(updated);
+    if (selectedGame?.id === universeId) setSelectedGame(null);
+  };
+
+  const handleRefreshGame = async (universeId) => {
+    const result = await window.electronAPI.refreshGame(universeId);
+    if (result.success) {
+      setGames((prev) =>
+        prev.map((g) => (g.id === universeId ? { ...g, ...result.game } : g))
+      );
+      if (selectedGame?.id === universeId) {
+        setSelectedGame((prev) => ({ ...prev, ...result.game }));
+      }
+    }
+  };
+
+  return (
+    <div className="h-screen flex flex-col">
+      <Toast />
+      {/* Custom Title Bar */}
+      <div className="drag-bar flex items-center justify-between bg-roblox-dark border-b border-roblox-border/50 select-none">
+        <div className="flex items-center gap-3 pl-4">
+          <div className="w-5 h-5 bg-roblox-red rounded flex items-center justify-center">
+            <svg className="w-3 h-3 text-white" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M5.164 0L0 18.534l12.626 5.347L24 5.347 18.836 0H5.164zm1.067 2.622l8.248 14.286-3.222 1.367L4.372 2.622h1.859z" />
+            </svg>
+          </div>
+          <span className="text-sm font-semibold text-gray-200">
+            Roblox Game Notifier
+          </span>
+        </div>
+        <div className="flex no-drag">
+          <button
+            className="titlebar-btn relative"
+            onClick={() => setShowNotifPanel(true)}
+          >
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" />
+              <path d="M13.73 21a2 2 0 01-3.46 0" />
+            </svg>
+            {notifCount > 0 && (
+              <span className="absolute -top-1 -right-1 w-4 h-4 bg-roblox-red text-[9px] text-white font-bold rounded-full flex items-center justify-center">
+                {notifCount > 9 ? "9+" : notifCount}
+              </span>
+            )}
+          </button>
+          <button className="titlebar-btn" onClick={() => window.electronAPI.minimize()}>
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M5 12h14" />
+            </svg>
+          </button>
+          <button className="titlebar-btn" onClick={() => window.electronAPI.maximize()}>
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <rect x="3" y="3" width="18" height="18" rx="2" />
+            </svg>
+          </button>
+          <button className="titlebar-btn hover:!bg-red-600/80" onClick={() => window.electronAPI.close()}>
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M18 6L6 18M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex flex-1 overflow-hidden">
+        <Sidebar
+          games={games}
+          selectedGame={selectedGame}
+          onSelectGame={setSelectedGame}
+          onAddGame={() => setShowAddModal(true)}
+          onRemoveGame={handleRemoveGame}
+          onOpenSettings={() => setShowSettings(true)}
+          loading={loading}
+        />
+
+        <main className="flex-1 overflow-y-auto">
+          {selectedGame ? (
+            <GameDetail
+              game={selectedGame}
+              onRefresh={handleRefreshGame}
+              onRemove={handleRemoveGame}
+            />
+          ) : (
+            <div className="h-full flex items-center justify-center">
+              <div className="text-center space-y-4 fade-in">
+                <div className="w-20 h-20 mx-auto bg-roblox-card rounded-2xl flex items-center justify-center border border-roblox-border">
+                  <svg className="w-10 h-10 text-gray-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                    <path d="M5.164 0L0 18.534l12.626 5.347L24 5.347 18.836 0H5.164zm1.067 2.622l8.248 14.286-3.222 1.367L4.372 2.622h1.859z" />
+                  </svg>
+                </div>
+                <div>
+                  <h2 className="text-xl font-semibold text-gray-300">
+                    {games.length === 0
+                      ? "No games tracked yet"
+                      : "Select a game"}
+                  </h2>
+                  <p className="text-gray-500 mt-1">
+                    {games.length === 0
+                      ? "Click the + button to add your first game"
+                      : "Choose a game from the sidebar to view details"}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+        </main>
+      </div>
+
+      {/* Modals */}
+      {showAddModal && (
+        <AddGameModal
+          onAdd={handleAddGame}
+          onClose={() => setShowAddModal(false)}
+        />
+      )}
+      {showSettings && (
+        <Settings onClose={() => setShowSettings(false)} />
+      )}
+      {showNotifPanel && (
+        <NotificationPanel onClose={() => setShowNotifPanel(false)} />
+      )}
+    </div>
+  );
+}
