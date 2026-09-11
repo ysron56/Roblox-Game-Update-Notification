@@ -59,7 +59,7 @@ function createWindow() {
 function createTray() {
   const icon = nativeImage.createFromPath(path.join(__dirname, "src", "icon.png"));
   tray = new Tray(icon);
-  tray.setToolTip("Roblox Game Notifier");
+  tray.setToolTip("Roblox Game Update Notification");
   updateTrayMenu();
 }
 
@@ -74,7 +74,7 @@ function updateTrayMenu() {
   }));
 
   const contextMenu = Menu.buildFromTemplate([
-    { label: "Roblox Notifier", enabled: false },
+    { label: "Roblox Game Update Notification", enabled: false },
     { type: "separator" },
     ...gameMenuItems,
     { type: "separator" },

@@ -1,6 +1,6 @@
 <div align="center">
 
-# Roblox Game Notifier
+# Roblox Game Update Notification
 
 **Desktop application for tracking Roblox game updates and events in real-time.**
 
@@ -55,14 +55,14 @@
 
 [![Download Latest](https://img.shields.io/badge/Download-Windows-0078D4?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/ysron56/Roblox-Notification/releases/latest)
 
-**Roblox.Game.Notifier.1.0.0.exe** (~80MB)
+**Roblox.Game.Update.Notification.1.0.0.exe** (~80MB)
 
 </div>
 
 ### Verify Download
 
 ```
-SHA256: 8B57E1F3E11E4AAC3F0EF0ACFF363F82FD5AE423073552E0666DFDA3E1235533
+SHA256: AA85F78683BD055F9D98D7CCD705AF21132A42EA35553F19B2B8813F58C28813
 ```
 
 ---
@@ -167,7 +167,7 @@ npm run dev
 npm run build
 ```
 
-Output: `release/Roblox Game Notifier 1.0.0.exe`
+Output: `release/Roblox Game Update Notification 1.0.0.exe`
 
 ---
 

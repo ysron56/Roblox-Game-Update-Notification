@@ -14,7 +14,7 @@
   },
   "build": {
     "appId": "com.roblox.notifier",
-    "productName": "Roblox Game Notifier",
+    "productName": "Roblox Game Update Notification",
     "directories": {
       "output": "release"
     },
@@ -36,7 +36,7 @@
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "Roblox Game Notifier"
+      "shortcutName": "Roblox Game Update Notification"
     }
   },
   "devDependencies": {

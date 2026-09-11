@@ -80,13 +80,9 @@ export default function App() {
       {/* Custom Title Bar */}
       <div className="drag-bar flex items-center justify-between bg-roblox-dark border-b border-roblox-border/50 select-none">
         <div className="flex items-center gap-3 pl-4">
-          <div className="w-5 h-5 bg-roblox-red rounded flex items-center justify-center">
-            <svg className="w-3 h-3 text-white" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M5.164 0L0 18.534l12.626 5.347L24 5.347 18.836 0H5.164zm1.067 2.622l8.248 14.286-3.222 1.367L4.372 2.622h1.859z" />
-            </svg>
-          </div>
+          <img src="icon.png" alt="Logo" className="w-5 h-5 rounded" />
           <span className="text-sm font-semibold text-gray-200">
-            Roblox Game Notifier
+            Roblox Game Update Notification
           </span>
         </div>
         <div className="flex no-drag">
@@ -144,10 +140,8 @@ export default function App() {
           ) : (
             <div className="h-full flex items-center justify-center">
               <div className="text-center space-y-4 fade-in">
-                <div className="w-20 h-20 mx-auto bg-roblox-card rounded-2xl flex items-center justify-center border border-roblox-border">
-                  <svg className="w-10 h-10 text-gray-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                    <path d="M5.164 0L0 18.534l12.626 5.347L24 5.347 18.836 0H5.164zm1.067 2.622l8.248 14.286-3.222 1.367L4.372 2.622h1.859z" />
-                  </svg>
+                <div className="w-20 h-20 mx-auto bg-roblox-card rounded-2xl flex items-center justify-center border border-roblox-border overflow-hidden">
+                  <img src="icon.png" alt="Logo" className="w-full h-full object-cover" />
                 </div>
                 <div>
                   <h2 className="text-xl font-semibold text-gray-300">
